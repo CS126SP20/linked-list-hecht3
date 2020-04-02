@@ -15,15 +15,22 @@ namespace cs126linkedlist {
 template <typename ElementType>
 class LinkedList {
 
-
+  int size_ = 0;
 
   // Declare any struct, class, or anything you need to use here, as long as it
   // is private.
 
   // Here is a struct to get you started. You'll probably need more than this.
-  struct Node { };
+  struct Node {
+    ElementType data;
+    Node* next;
+  };
 
+  Node* head_;
+  Node* current_;
+  Node* temp_;
 
+  void AddNode(ElementType data);
 
 
  // DO NOT CHANGE THE PUBLIC INTERFACE OF THIS CLASS!

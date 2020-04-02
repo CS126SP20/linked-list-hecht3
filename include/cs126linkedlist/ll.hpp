@@ -11,10 +11,41 @@
 namespace cs126linkedlist {
 
 template <typename ElementType>
-LinkedList<ElementType>::LinkedList() {}
+LinkedList<ElementType>::LinkedList() {
+  head_ = NULL;
+  current_ = NULL;
+  temp_ = NULL;
+}
 
 template <typename ElementType>
-LinkedList<ElementType>::LinkedList(const std::vector<ElementType>& values) {}
+LinkedList<ElementType>::LinkedList(const std::vector<ElementType>& values) {
+  size_ = values.size();
+  head_ = NULL;
+  current_ = NULL;
+  temp_ = NULL;
+  if (values.size() != 0) {
+    for (ElementType value : values) {
+      AddNode(value);
+    }
+  }
+}
+
+
+template<typename ElementType>
+void LinkedList<ElementType>::AddNode(ElementType node_data) {
+  Node* n = new Node();
+  n->data = node_data;
+  n->next = NULL;
+  if (head_ != NULL) {
+    current_ = head_;
+    while (current_->next != NULL) {
+      current_ = current_->next;
+    }
+    current_->next = n;
+  } else {
+    head_ = n;
+  }
+}
 
 // Copy constructor
 template <typename ElementType>
@@ -41,28 +72,44 @@ LinkedList<ElementType>& LinkedList<ElementType>::operator=(
     LinkedList<ElementType>&& source) noexcept {}
 
 template <typename ElementType>
-void LinkedList<ElementType>::push_front(const ElementType& value) {}
+void LinkedList<ElementType>::push_front(const ElementType& value) {
+  size_++;
+}
 
 template <typename ElementType>
-void LinkedList<ElementType>::push_back(const ElementType& value) {}
+void LinkedList<ElementType>::push_back(const ElementType& value) {
+  size_++;
+}
 
 template <typename ElementType>
-ElementType LinkedList<ElementType>::front() const {}
+ElementType LinkedList<ElementType>::front() const {
+
+}
 
 template <typename ElementType>
-ElementType LinkedList<ElementType>::back() const {}
+ElementType LinkedList<ElementType>::back() const {
+
+}
 
 template <typename ElementType>
-void LinkedList<ElementType>::pop_front() {}
+void LinkedList<ElementType>::pop_front() {
+  size_--;
+}
 
 template <typename ElementType>
-void LinkedList<ElementType>::pop_back() {}
+void LinkedList<ElementType>::pop_back() {
+  size_--;
+}
 
 template <typename ElementType>
-int LinkedList<ElementType>::size() const {}
+int LinkedList<ElementType>::size() const {
+  return size_;
+}
 
 template <typename ElementType>
-bool LinkedList<ElementType>::empty() const {}
+bool LinkedList<ElementType>::empty() const {
+  return size_ == 0;
+}
 
 template <typename ElementType>
 void LinkedList<ElementType>::clear() {}
@@ -72,10 +119,14 @@ std::ostream& operator<<(std::ostream& os,
                          const LinkedList<ElementType>& list) {}
 
 template <typename ElementType>
-void LinkedList<ElementType>::RemoveNth(int n) {}
+void LinkedList<ElementType>::RemoveNth(int n) {
+  size_--;
+}
 
 template <typename ElementType>
-void LinkedList<ElementType>::RemoveOdd() {}
+void LinkedList<ElementType>::RemoveOdd() {
+  size_--;
+}
 
 template <typename ElementType>
 bool LinkedList<ElementType>::operator==(
@@ -120,5 +171,6 @@ LinkedList<ElementType>::begin() const {}
 template <typename ElementType>
 typename LinkedList<ElementType>::const_iterator LinkedList<ElementType>::end()
     const {}
+
 
 }  // namespace cs126linkedlist

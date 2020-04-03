@@ -15,37 +15,22 @@ LinkedList<ElementType>::LinkedList() {
   head_ = NULL;
   current_ = NULL;
   temp_ = NULL;
+  back_ = NULL;
 }
 
 template <typename ElementType>
 LinkedList<ElementType>::LinkedList(const std::vector<ElementType>& values) {
-  size_ = values.size();
   head_ = NULL;
   current_ = NULL;
   temp_ = NULL;
+  back_ = NULL;
   if (values.size() != 0) {
     for (ElementType value : values) {
-      AddNode(value);
+      push_back(value);
     }
   }
 }
 
-
-template<typename ElementType>
-void LinkedList<ElementType>::AddNode(ElementType node_data) {
-  Node* n = new Node();
-  n->data = node_data;
-  n->next = NULL;
-  if (head_ != NULL) {
-    current_ = head_;
-    while (current_->next != NULL) {
-      current_ = current_->next;
-    }
-    current_->next = n;
-  } else {
-    head_ = n;
-  }
-}
 
 // Copy constructor
 template <typename ElementType>
@@ -66,29 +51,47 @@ template <typename ElementType>
 LinkedList<ElementType>& LinkedList<ElementType>::operator=(
     const LinkedList<ElementType>& source) {}
 
-// Move assignment operator
+// Move assignment operator->data
 template <typename ElementType>
 LinkedList<ElementType>& LinkedList<ElementType>::operator=(
     LinkedList<ElementType>&& source) noexcept {}
 
 template <typename ElementType>
 void LinkedList<ElementType>::push_front(const ElementType& value) {
+  Node* n = new Node();
+  n->data = value;
+  n->next = head_;
+  head_ = n;
   size_++;
 }
 
 template <typename ElementType>
 void LinkedList<ElementType>::push_back(const ElementType& value) {
+  Node* n = new Node();
+  n->data = value;
+  n->next = NULL;
+  if (head_ != NULL) {
+    current_ = head_;
+    while (current_->next != NULL) {
+      current_ = current_->next;
+    }
+    current_->next = n;
+    back_ = n;
+  } else {
+    head_ = n;
+    back_ = n;
+  }
   size_++;
 }
 
 template <typename ElementType>
 ElementType LinkedList<ElementType>::front() const {
-
+  return head_->data;
 }
 
 template <typename ElementType>
 ElementType LinkedList<ElementType>::back() const {
-
+  return back_->data;
 }
 
 template <typename ElementType>

@@ -61,4 +61,26 @@ TEST_CASE("LL from vector", "[constructor][size][empty]") {
   }
 }
 
+TEST_CASE("Push front", "[constructor][push_front][size][empty]") {
+  std::vector<int> vec;
+  vec.push_back(5);
+  vec.push_back(2);
+  vec.push_back(3);
+  LinkedList<int> list(vec);
+
+  SECTION("Check size") {
+    REQUIRE(list.size() == 3);
+    REQUIRE(!list.empty());
+  }
+
+  SECTION("Push front 2 elements") {
+    list.push_front(7);
+    REQUIRE(list.front() == 7);
+    list.push_front(8);
+    REQUIRE(list.front() == 8);
+    REQUIRE(list.size() == 5);
+  }
+
+}
+
 // TODO(you): Add more tests below.

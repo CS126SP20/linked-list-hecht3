@@ -29,8 +29,7 @@ class LinkedList {
   Node* head_;
   Node* current_;
   Node* temp_;
-
-  void AddNode(ElementType data);
+  Node* back_;
 
 
  // DO NOT CHANGE THE PUBLIC INTERFACE OF THIS CLASS!

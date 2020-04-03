@@ -11,7 +11,7 @@ using cs126linkedlist::LinkedList;
 // Read more on SECTIONs here:
 // `https://github.com/catchorg/Catch2/tree/master/docs`
 // in the "Test Cases and Sections" file.
-TEST_CASE("Push Back", "[constructor][push_back][size][empty]") {
+TEST_CASE("Push Back", "[default constructor][push_back][size][empty]") {
   LinkedList<int> list;
 
   REQUIRE(list.size() == 0);
@@ -31,7 +31,7 @@ TEST_CASE("Push Back", "[constructor][push_back][size][empty]") {
   }
 }
 
-TEST_CASE("LL from vector", "[constructor][size][empty]") {
+TEST_CASE("LL from vector", "[Vec constructor][size][empty]") {
   std::vector<int> vec;
   vec.push_back(5);
   vec.push_back(2);
@@ -55,17 +55,19 @@ TEST_CASE("LL from vector", "[constructor][size][empty]") {
   char_vec.push_back('a');
   char_vec.push_back('b');
   char_vec.push_back('c');
+  LinkedList<char> char_list(char_vec);
   SECTION("Other element type") {
-    REQUIRE(char_vec.size() == 3);
-    REQUIRE(!char_vec.empty());
+    REQUIRE(char_list.size() == 3);
+    REQUIRE(!char_list.empty());
   }
 }
 
-TEST_CASE("Push front", "[constructor][push_front][size][empty]") {
+TEST_CASE("Push front",
+          "[Vec constructor][push_front][size][empty][front][back]") {
   std::vector<int> vec;
+  vec.push_back(4);
+  vec.push_back(1);
   vec.push_back(5);
-  vec.push_back(2);
-  vec.push_back(3);
   LinkedList<int> list(vec);
 
   SECTION("Check size") {
@@ -81,6 +83,41 @@ TEST_CASE("Push front", "[constructor][push_front][size][empty]") {
     REQUIRE(list.size() == 5);
   }
 
+  std::vector<double> empty_vec;
+  LinkedList<double> empty_list(empty_vec);
+  SECTION("Push front on empty vector") {
+    empty_list.push_front(7);
+    REQUIRE(empty_list.front() == 7);
+    empty_list.push_front(8);
+    REQUIRE(empty_list.front() == 8);
+    REQUIRE(empty_list.size() == 2);
+    REQUIRE(empty_list.back() == 7);
+  }
 }
+
+TEST_CASE("Pop front",
+          "[Vec constructor][push_back][size]"
+          "[empty][front][back][pop_front]") {
+  std::vector<int> vec;
+  vec.push_back(7);
+  vec.push_back(8);
+  vec.push_back(0);
+  LinkedList<int> list(vec);
+
+  SECTION("Pop front and empty list") {
+    list.pop_front();
+    REQUIRE(list.size() == 2);
+    list.pop_front();
+    REQUIRE(list.size() == 1);
+    list.pop_front();
+    REQUIRE(list.size() == 0);
+    REQUIRE(list.empty());
+    // Attempt to pop front on empty list
+    list.pop_front();
+    REQUIRE(list.size() == 0);
+    REQUIRE(list.empty());
+  }
+}
+
 
 // TODO(you): Add more tests below.

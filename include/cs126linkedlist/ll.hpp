@@ -62,6 +62,9 @@ void LinkedList<ElementType>::push_front(const ElementType& value) {
   n->data = value;
   n->next = head_;
   head_ = n;
+  if (head_->next == NULL) {
+    back_ = head_;
+  }
   size_++;
 }
 
@@ -96,7 +99,14 @@ ElementType LinkedList<ElementType>::back() const {
 
 template <typename ElementType>
 void LinkedList<ElementType>::pop_front() {
-  size_--;
+  if (head_ != NULL) {
+    size_--;
+    if (head_->next != NULL) {
+      head_ = head_->next;
+    } else {
+      head_ = NULL;
+    }
+  }
 }
 
 template <typename ElementType>

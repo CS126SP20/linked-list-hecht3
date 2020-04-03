@@ -111,7 +111,17 @@ void LinkedList<ElementType>::pop_front() {
 
 template <typename ElementType>
 void LinkedList<ElementType>::pop_back() {
-  size_--;
+  if (size() == 1) {
+    pop_front();
+  } else if (size() > 0 && head_ != NULL) {
+    current_ = head_;
+    while (current_->next != back_) {
+      current_ = current_->next;
+    }
+    current_->next == NULL;
+    back_ = current_;
+    size_--;
+  }
 }
 
 template <typename ElementType>
@@ -125,7 +135,9 @@ bool LinkedList<ElementType>::empty() const {
 }
 
 template <typename ElementType>
-void LinkedList<ElementType>::clear() {}
+void LinkedList<ElementType>::clear() {
+
+}
 
 template <typename ElementType>
 std::ostream& operator<<(std::ostream& os,
@@ -133,7 +145,21 @@ std::ostream& operator<<(std::ostream& os,
 
 template <typename ElementType>
 void LinkedList<ElementType>::RemoveNth(int n) {
-  size_--;
+  int i = 0;
+  if (n == 0 && head_ != NULL) {
+    pop_front();
+  } else if (head_ != NULL && size() > n) {
+    current_ = head_;
+    while (current_->next != NULL) {
+      if (i == n - 1) {
+        current_ = current_->next->next;
+        size_--;
+      } else {
+        current_ = current_->next;
+      }
+      i++;
+    }
+  }
 }
 
 template <typename ElementType>

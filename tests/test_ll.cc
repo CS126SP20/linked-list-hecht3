@@ -106,6 +106,7 @@ TEST_CASE("Pop front",
 
   SECTION("Pop front and empty list") {
     list.pop_front();
+    REQUIRE(list.front() == 8);
     REQUIRE(list.size() == 2);
     list.pop_front();
     REQUIRE(list.size() == 1);
@@ -119,5 +120,43 @@ TEST_CASE("Pop front",
   }
 }
 
+TEST_CASE("Remove Nth node", "[Vec constructor][size][empty]") {
+  std::vector<int> vec;
+  vec.push_back(7);
+  vec.push_back(8);
+  vec.push_back(0);
+  LinkedList<int> list(vec);
+
+  SECTION("Remove 0th node") {
+    list.RemoveNth(0);
+    REQUIRE(list.size() == 2);
+    REQUIRE(list.front() == 8);/////////////////Add more tests here once a method is completed for getting Nth node
+  }
+}
+
+TEST_CASE("Pop back",
+          "[Vec constructor][push_back][size]"
+          "[empty][front][back][pop_back]") {
+  std::vector<int> vec;
+  vec.push_back(0);
+  vec.push_back(7);
+  vec.push_back(1);
+  LinkedList<int> list(vec);
+
+  SECTION("Pop back and empty list") {
+    list.pop_back();
+    REQUIRE(list.size() == 2);
+    REQUIRE(list.back() == 7);
+    list.pop_back();
+    REQUIRE(list.size() == 1);
+    list.pop_front();
+    REQUIRE(list.size() == 0);
+    REQUIRE(list.empty());
+    // Attempt to pop front on empty list
+    list.pop_back();
+    REQUIRE(list.size() == 0);
+    REQUIRE(list.empty());
+  }
+}
 
 // TODO(you): Add more tests below.

@@ -10,11 +10,12 @@
 
 namespace cs126linkedlist {
 
+const int kEven = 2;
+
 template <typename ElementType>
 LinkedList<ElementType>::LinkedList() {
   head_ = NULL;
   current_ = NULL;
-  temp_ = NULL;
   back_ = NULL;
 }
 
@@ -22,7 +23,6 @@ template <typename ElementType>
 LinkedList<ElementType>::LinkedList(const std::vector<ElementType>& values) {
   head_ = NULL;
   current_ = NULL;
-  temp_ = NULL;
   back_ = NULL;
   if (values.size() != 0) {
     for (ElementType value : values) {
@@ -51,7 +51,7 @@ template <typename ElementType>
 LinkedList<ElementType>& LinkedList<ElementType>::operator=(
     const LinkedList<ElementType>& source) {}
 
-// Move assignment operator->data
+// Move assignment operator->datatrue
 template <typename ElementType>
 LinkedList<ElementType>& LinkedList<ElementType>::operator=(
     LinkedList<ElementType>&& source) noexcept {}
@@ -99,10 +99,13 @@ ElementType LinkedList<ElementType>::back() const {
 
 template <typename ElementType>
 void LinkedList<ElementType>::pop_front() {
+  Node* temp;
   if (head_ != NULL) {
     size_--;
     if (head_->next != NULL) {
-      head_ = head_->next;
+      temp = head_;
+      delete head_;
+      head_ = temp->next;
     } else {
       head_ = NULL;
     }
@@ -111,6 +114,7 @@ void LinkedList<ElementType>::pop_front() {
 
 template <typename ElementType>
 void LinkedList<ElementType>::pop_back() {
+  Node* temp;
   if (size() == 1) {
     pop_front();
   } else if (size() > 0 && head_ != NULL) {
@@ -118,6 +122,7 @@ void LinkedList<ElementType>::pop_back() {
     while (current_->next != back_) {
       current_ = current_->next;
     }
+    delete back_;
     current_->next == NULL;
     back_ = current_;
     size_--;
@@ -153,6 +158,7 @@ void LinkedList<ElementType>::RemoveNth(int n) {
     while (current_->next != NULL) {
       if (i == n - 1) {
         current_ = current_->next->next;
+        delete current_->next;
         size_--;
       } else {
         current_ = current_->next;
@@ -164,16 +170,48 @@ void LinkedList<ElementType>::RemoveNth(int n) {
 
 template <typename ElementType>
 void LinkedList<ElementType>::RemoveOdd() {
-  size_--;
+  if (head_ != NULL && size() > 1) {
+    current_ = head_;
+    while (current_->next != NULL) {
+      if (current_->next->next != NULL) {
+        current_ = current_->next->next;
+        delete current_->next;
+      } else {
+        current_->next = NULL;
+      }
+      size_--;
+    }
+    back_ = current_;
+  }
 }
 
 template <typename ElementType>
 bool LinkedList<ElementType>::operator==(
-    const LinkedList<ElementType>& rhs) const {}
+    const LinkedList<ElementType>& rhs) const {
+  if (rhs.size() == 0 && size() == 0) {
+    return true;
+  }
+  bool is_equal = (rhs.size() == size());
+  Node* temp_this;
+  Node* temp_rhs;
+  temp_this = head_;
+  temp_rhs = rhs.head_;
+  while (temp_this != NULL && is_equal) {
+    if (temp_this->data != temp_rhs->data) {
+      is_equal = false;
+    } else {
+      temp_this = temp_this->next;
+      temp_rhs = temp_rhs->next;
+    }
+  }
+  return is_equal;
+}
 
 template <typename ElementType>
 bool operator!=(const LinkedList<ElementType>& lhs,
-                const LinkedList<ElementType>& rhs) {}
+                const LinkedList<ElementType>& rhs) {
+  return !(lhs == rhs);
+}
 
 template <typename ElementType>
 typename LinkedList<ElementType>::iterator& LinkedList<ElementType>::iterator::

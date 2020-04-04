@@ -28,7 +28,6 @@ class LinkedList {
 
   Node* head_;
   Node* current_;
-  Node* temp_;
   Node* back_;
 
 

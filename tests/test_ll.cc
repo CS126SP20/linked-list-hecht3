@@ -343,13 +343,34 @@ TEST_CASE("Copy assignment operator",
   vec.push_back(91);
   vec.push_back(100);
 
-  SECTION("Copy and check size") {
+  SECTION("Copy empty and check size") {
     LinkedList<int> list1(vec);
-    LinkedList<int> list2 = list1;
+    LinkedList<int> list2;
+    list2 = list1;
     REQUIRE(list2.size() == 6);
     REQUIRE(list1 == list2);
     REQUIRE(list2.back() == 100);
     REQUIRE(list2.front() == 33);
+  }
+
+  SECTION("Copy non-empty and check size") {
+    LinkedList<int> list1(vec);
+    vec.push_back(5);
+    LinkedList<int> list2(vec);
+    list2 = list1;
+    REQUIRE(list2.size() == 6);
+    REQUIRE(list1 == list2);
+    REQUIRE(list2.back() == 100);
+    REQUIRE(list2.front() == 33);
+  }
+
+  SECTION("Copy self and check size") {
+    LinkedList<int> list1(vec);
+    list1 = list1;
+    REQUIRE(list1.size() == 6);
+    REQUIRE(list1 == list1);
+    REQUIRE(list1.back() == 100);
+    REQUIRE(list1.front() == 33);
   }
 }
 
@@ -371,6 +392,27 @@ TEST_CASE("Move constructor",
     REQUIRE(list1.empty());
     REQUIRE(list2.back() == 108);
     REQUIRE(list2.front() == 83);
+  }
+}
+
+TEST_CASE("Begin and end", "[vec constructor][begin][end][size]") {
+  std::vector<int> vec;
+  vec.push_back(83);
+  vec.push_back(87);
+  vec.push_back(85);
+  vec.push_back(87);
+  vec.push_back(81);
+  vec.push_back(108);
+
+  SECTION("Iterate through incrementing size") {
+    LinkedList<int> list(vec);
+    int size = 0;
+    for (LinkedList<int>::iterator iterator = list.begin();
+         iterator != list.end();
+         ++iterator) {
+      size++;
+    }
+    REQUIRE(list.size() == size);
   }
 }
 

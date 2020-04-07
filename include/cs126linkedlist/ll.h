@@ -15,7 +15,7 @@ namespace cs126linkedlist {
 template <typename ElementType>
 class LinkedList {
 
-  int size_ = 0;
+  size_t size_ = 0;
 
   // Declare any struct, class, or anything you need to use here, as long as it
   // is private.

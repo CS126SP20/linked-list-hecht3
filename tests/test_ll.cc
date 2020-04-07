@@ -230,11 +230,6 @@ TEST_CASE("Remove Nth node", "[Vec constructor][size][empty]") {
     REQUIRE(list.back() == 0);
     REQUIRE(list.front() == 7);
   }
-
-  SECTION("N out of bounds") {
-    list.RemoveNth(8);
-    REQUIRE_THROWS(std::out_of_range("Node index out of range"));
-  }
 }
 
 TEST_CASE("Pop back",
@@ -270,7 +265,6 @@ TEST_CASE("Remove odd", "[Vec constructor][size][empty][front][back]") {
   vec.push_back(9);
   vec.push_back(10);
 
-  //FAILS HERE_____________________________________________________________________
   SECTION("Remove odd on even length list and check size") {
     LinkedList<int> list(vec);
     list.RemoveOdd();
@@ -459,7 +453,7 @@ TEST_CASE("Test insertion operator", "[vec constructor][insertion operator]") {
   char_vec.push_back('e');
   std::string correct = "a, b, c, d, e";
   std::stringstream to_check;
-  std::ostream& output = to_check;
+  std::ostream &output = to_check;
   LinkedList<char> char_list(char_vec);
   output << char_list;
   SECTION("Check string equality") {

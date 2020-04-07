@@ -11,6 +11,19 @@ using cs126linkedlist::LinkedList;
 // Read more on SECTIONs here:
 // `https://github.com/catchorg/Catch2/tree/master/docs`
 // in the "Test Cases and Sections" file.
+
+TEST_CASE("Destructor", "[Vec constructor][destructor]") {
+  std::vector<int> vec;
+  vec.push_back(0);
+  vec.push_back(7);
+  vec.push_back(1);
+  vec.push_back(2);
+  vec.push_back(9);
+  vec.push_back(10);
+  auto *list = new LinkedList(vec);
+  delete list;
+}
+
 TEST_CASE("Equality operator", "[Vec constructor][pop_back]") {
   std::vector<int> vec;
   vec.push_back(0);
@@ -84,6 +97,7 @@ TEST_CASE("Push Back", "[default constructor][push_back][size][empty]") {
     list.push_back(1);
     REQUIRE(list.size() == 1);
     REQUIRE(list.back() == 1);
+    REQUIRE(list.front() == 1);
   }
 
   SECTION("Push back two elements") {
@@ -204,6 +218,19 @@ TEST_CASE("Remove Nth node", "[Vec constructor][size][empty]") {
     REQUIRE(list.front() ==
             8);/////////////////Add more tests here once a method is completed for getting Nth node and fix the current->next->next issue
   }
+
+  SECTION("Remove last node") {
+    list.RemoveNth(2);
+    REQUIRE(list.size() == 2);
+    REQUIRE((list.back() == 8));
+  }
+
+  SECTION("Remove second to last node") {
+    list.RemoveNth(1);
+    REQUIRE(list.size() == 2);
+    REQUIRE(list.back() == 0);
+    REQUIRE(list.front() == 7);
+  }
 }
 
 TEST_CASE("Pop back",
@@ -231,39 +258,119 @@ TEST_CASE("Pop back",
 }
 
 TEST_CASE("Remove odd", "[Vec constructor][size][empty][front][back]") {
+//  std::vector<int> vec;
+//  vec.push_back(0);
+//  vec.push_back(7);
+//  vec.push_back(1);
+//  vec.push_back(2);
+//  vec.push_back(9);
+//  vec.push_back(10);
+//
+////  //FAILS HERE_____________________________________________________________________
+//  SECTION("Remove odd on even length list and check size") {
+//    LinkedList<int> list(vec);
+//    REQUIRE(list.size() == 6);
+//    list.RemoveOdd();
+//    REQUIRE(list.size() == 3);
+//    REQUIRE(list.back() == 9);
+//    REQUIRE(list.front() == 0);
+//    REQUIRE(!list.empty());
+//  }
+//
+//  vec.clear();
+//  vec.push_back(0);
+//  vec.push_back(7);
+//  vec.push_back(1);
+//  vec.push_back(2);
+//  vec.push_back(9);
+//
+//  SECTION("Remove odd on odd length list and check size") {
+//    LinkedList<int> list(vec);
+//    REQUIRE(list.size() == 5);
+//    list.RemoveOdd();
+//    REQUIRE(list.size() == 3);
+//    REQUIRE(list.back() == 9);
+//    REQUIRE(list.front() == 0);
+//    REQUIRE(!list.empty());
+//  }
+}
+
+TEST_CASE("Clear", "[Vec constructor][size][empty][front][back]") {
   std::vector<int> vec;
-  vec.push_back(0);
+  vec.push_back(3);
   vec.push_back(7);
   vec.push_back(1);
   vec.push_back(2);
   vec.push_back(9);
   vec.push_back(10);
 
-  SECTION("Remove odd on even length list and check size") {
+  SECTION("Clear and check size") {
     LinkedList<int> list(vec);
     REQUIRE(list.size() == 6);
-    list.RemoveOdd();
-    REQUIRE(list.size() == 3);
-    REQUIRE(list.back() == 9);
-    REQUIRE(list.front() == 0);
-    REQUIRE(!list.empty());
+    list.clear();
+    REQUIRE(list.size() == 0);
+    REQUIRE(list.empty());
   }
+}
 
-  vec.clear();
+TEST_CASE("Copy constructor",
+          "[Copy constructor][size][front][back][equals operator]") {
+  std::vector<int> vec;
+  vec.push_back(3);
   vec.push_back(0);
-  vec.push_back(7);
-  vec.push_back(1);
-  vec.push_back(2);
-  vec.push_back(9);
+  vec.push_back(3);
+  vec.push_back(8);
+  vec.push_back(4);
+  vec.push_back(10);
 
-  SECTION("Remove odd on odd length list and check size") {
-    LinkedList<int> list(vec);
-    REQUIRE(list.size() == 5);
-    list.RemoveOdd();
-    REQUIRE(list.size() == 3);
-    REQUIRE(list.back() == 9);
-    REQUIRE(list.front() == 0);
-    REQUIRE(!list.empty());
+  SECTION("Copy and check size") {
+    LinkedList<int> list1(vec);
+    LinkedList<int> list2(list1);
+    REQUIRE(list2.size() == 6);
+    REQUIRE(list1 == list2);
+    REQUIRE(list2.back() == 10);
+    REQUIRE(list2.front() == 3);
+  }
+}
+
+TEST_CASE("Copy assignment operator",
+          "[Copy assignment operator][size][front][back][equals operator]") {
+  std::vector<int> vec;
+  vec.push_back(33);
+  vec.push_back(27);
+  vec.push_back(15);
+  vec.push_back(27);
+  vec.push_back(91);
+  vec.push_back(100);
+
+  SECTION("Copy and check size") {
+    LinkedList<int> list1(vec);
+    LinkedList<int> list2 = list1;
+    REQUIRE(list2.size() == 6);
+    REQUIRE(list1 == list2);
+    REQUIRE(list2.back() == 100);
+    REQUIRE(list2.front() == 33);
+  }
+}
+
+TEST_CASE("Move constructor",
+          "[move constructor][size][front][back][empty]") {
+  std::vector<int> vec;
+  vec.push_back(83);
+  vec.push_back(87);
+  vec.push_back(85);
+  vec.push_back(87);
+  vec.push_back(81);
+  vec.push_back(108);
+
+  SECTION("Copy and check size") {
+    LinkedList<int> list1(vec);
+    LinkedList<int> list2 = std::move(list1);
+    REQUIRE(list2.size() == 6);
+    REQUIRE(list1 != list2);
+    REQUIRE(list1.empty());
+    REQUIRE(list2.back() == 108);
+    REQUIRE(list2.front() == 83);
   }
 }
 

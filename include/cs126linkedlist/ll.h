@@ -23,12 +23,16 @@ class LinkedList {
   // Here is a struct to get you started. You'll probably need more than this.
   struct Node {
     ElementType data;
-    Node* next;
+    Node* next = nullptr;
+    Node(ElementType data, Node* next) {
+      this->data = data;
+      this->next = next;
+    }
   };
 
-  Node* head_;
-  Node* current_;
-  Node* back_;
+  Node* current_ = nullptr;
+  Node* head_ = nullptr;
+  Node* back_ = nullptr;
 
 
  // DO NOT CHANGE THE PUBLIC INTERFACE OF THIS CLASS!

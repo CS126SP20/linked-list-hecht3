@@ -215,8 +215,7 @@ TEST_CASE("Remove Nth node", "[Vec constructor][size][empty]") {
   SECTION("Remove 0th node") {
     list.RemoveNth(0);
     REQUIRE(list.size() == 2);
-    REQUIRE(list.front() ==
-            8);/////////////////Add more tests here once a method is completed for getting Nth node and fix the current->next->next issue
+    REQUIRE(list.front() == 8);
   }
 
   SECTION("Remove last node") {
@@ -258,15 +257,15 @@ TEST_CASE("Pop back",
 }
 
 TEST_CASE("Remove odd", "[Vec constructor][size][empty][front][back]") {
-//  std::vector<int> vec;
-//  vec.push_back(0);
-//  vec.push_back(7);
-//  vec.push_back(1);
-//  vec.push_back(2);
-//  vec.push_back(9);
-//  vec.push_back(10);
-//
-////  //FAILS HERE_____________________________________________________________________
+  std::vector<int> vec;
+  vec.push_back(0);
+  vec.push_back(7);
+  vec.push_back(1);
+  vec.push_back(2);
+  vec.push_back(9);
+  vec.push_back(10);
+
+//  //FAILS HERE_____________________________________________________________________
 //  SECTION("Remove odd on even length list and check size") {
 //    LinkedList<int> list(vec);
 //    REQUIRE(list.size() == 6);
@@ -395,7 +394,9 @@ TEST_CASE("Move constructor",
   }
 }
 
-TEST_CASE("Begin and end", "[vec constructor][begin][end][size]") {
+TEST_CASE("Test iterator funcs",
+          "[vec constructor][begin][end][size][advance iterator]"
+          "[iterator get value]") {
   std::vector<int> vec;
   vec.push_back(83);
   vec.push_back(87);
@@ -404,15 +405,60 @@ TEST_CASE("Begin and end", "[vec constructor][begin][end][size]") {
   vec.push_back(81);
   vec.push_back(108);
 
-  SECTION("Iterate through incrementing size") {
+  SECTION("Iterate through incrementing size and checking elements") {
     LinkedList<int> list(vec);
+    std::vector<int> vec_check;
     int size = 0;
     for (LinkedList<int>::iterator iterator = list.begin();
          iterator != list.end();
          ++iterator) {
+      vec_check.push_back(*iterator);
       size++;
     }
     REQUIRE(list.size() == size);
+    REQUIRE(vec_check == vec);
+  }
+
+  SECTION("Enhanced for loop iteration for const iterators") {
+    LinkedList<int> list(vec);
+    std::vector<int> vec_check;
+    int size = 0;
+    for (int element : list) {
+      vec_check.push_back(element);
+      size++;
+    }
+    REQUIRE(list.size() == size);
+    REQUIRE(vec_check == vec);
+  }
+}
+
+TEST_CASE("Test insertion operator", "[vec constructor][insertion operator]") {
+  std::vector<int> vec;
+  vec.push_back(83);
+  vec.push_back(87);
+  vec.push_back(85);
+  vec.push_back(87);
+  vec.push_back(81);
+  vec.push_back(108);
+
+  SECTION("Print list of ints") {
+    LinkedList<int> list(vec);
+    std::cout << list;
+  }
+
+  std::vector<char> char_vec;
+  char_vec.push_back('a');
+  char_vec.push_back('b');
+  char_vec.push_back('c');
+  char_vec.push_back('d');
+  char_vec.push_back('e');
+  std::string correct = "a, b, c, d, e";
+  std::stringstream to_check;
+  std::ostream& output = to_check;
+  LinkedList<char> char_list(char_vec);
+  output << char_list;
+  SECTION("Check string equality") {
+    REQUIRE(correct == to_check.str());
   }
 }
 

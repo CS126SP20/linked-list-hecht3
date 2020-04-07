@@ -32,7 +32,7 @@ class LinkedList {
 
   Node* current_ = nullptr;
   Node* head_ = nullptr;
-  Node* back_ = nullptr;
+  Node* tail_ = nullptr;
 
 
  // DO NOT CHANGE THE PUBLIC INTERFACE OF THIS CLASS!

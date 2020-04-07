@@ -17,14 +17,14 @@ template <typename ElementType>
 LinkedList<ElementType>::LinkedList() {
   head_ = nullptr;
   current_ = nullptr;
-  back_ = nullptr;
+  tail_ = nullptr;
 }
 
 template <typename ElementType>
 LinkedList<ElementType>::LinkedList(const std::vector<ElementType>& values) {
   head_ = nullptr;
   current_ = nullptr;
-  back_ = nullptr;
+  tail_ = nullptr;
   if (values.size() != 0) {
     for (ElementType value : values) {
       push_back(value);
@@ -47,10 +47,10 @@ LinkedList<ElementType>::LinkedList(const LinkedList<ElementType>& source) {
 template <typename ElementType>
 LinkedList<ElementType>::LinkedList(LinkedList<ElementType>&& source) noexcept {
   head_ = source.head_;
-  back_ = source.back_;
+  tail_ = source.tail_;
   size_ = source.size();
   source.head_ = nullptr;
-  source.back_ = nullptr;
+  source.tail_ = nullptr;
   source.size_ = 0;
 }
 
@@ -64,7 +64,7 @@ LinkedList<ElementType>::~LinkedList() {
     ptr = temp;
   }
   head_ = nullptr;
-  back_ = nullptr;
+  tail_ = nullptr;
 }
 
 // Copy assignment operator
@@ -93,7 +93,7 @@ void LinkedList<ElementType>::push_front(const ElementType& value) {
   Node* n = new Node(value, head_);
   head_ = n;
   if (head_->next == nullptr) {
-    back_ = head_;
+    tail_ = head_;
   }
   size_++;
 }
@@ -101,12 +101,12 @@ void LinkedList<ElementType>::push_front(const ElementType& value) {
 template <typename ElementType>
 void LinkedList<ElementType>::push_back(const ElementType& value) {
   Node* n = new Node(value, nullptr);
-  if (head_ != nullptr && back_ != nullptr) {
-    back_->next = n;
-    back_ = n;
+  if (head_ != nullptr && tail_ != nullptr) {
+    tail_->next = n;
+    tail_ = n;
   } else {
     head_ = n;
-    back_ = n;
+    tail_ = n;
   }
   size_++;
 }
@@ -123,7 +123,7 @@ ElementType LinkedList<ElementType>::front() const {
 template <typename ElementType>
 ElementType LinkedList<ElementType>::back() const {
   if (head_) {
-    return back_->data;
+    return tail_->data;
   } else {
     throw std::out_of_range("List is empty");
   }
@@ -150,11 +150,11 @@ void LinkedList<ElementType>::pop_back() {
     pop_front();
   } else if (size() > 0 && head_ != nullptr) {
     current_ = head_;
-    while (current_->next != back_) {
+    while (current_->next != tail_) {
       current_ = current_->next;
     }
+    tail_ = current_;
     current_->next == nullptr;
-    back_ = current_;
     size_--;
   }
 }
@@ -179,7 +179,7 @@ void LinkedList<ElementType>::clear() {
     current_ = temp->next;
   }
   head_ = nullptr;
-  back_ = nullptr;
+  tail_ = nullptr;
   size_ = 0;
 }
 
@@ -203,34 +203,30 @@ void LinkedList<ElementType>::RemoveNth(int n) {
   int i = 0;
   if (n == 0 && head_ != nullptr) {
     pop_front();
-  } else if (n == size() - 1) {
+  } else if (n == size() - 1 && size() != 0) {
     pop_back();
   } else if (head_ != nullptr && size() > n) {
     current_ = head_;
     while (current_->next != nullptr) {
       if (i == n - 1 && current_->next->next) {
-        current_ = current_->next->next;
-        delete current_->next;
+        Node* temp = current_->next;
+        current_->next = current_->next->next;
+        delete temp;
         size_--;
       } else {
         current_ = current_->next;
       }
       i++;
     }
-  } else if (size() <= n) {
+  } else if (size() <= n || n < 0) {
     throw std::out_of_range("Node index out of range");
   }
 }
 
 template <typename ElementType>
 void LinkedList<ElementType>::RemoveOdd() {
-  if (head_ != nullptr && size_ > 1) {
-    const int size = size_;
-    for (int i = 0; i < size; i++) {
-      if (i == 1 || i % kEven == 1) {
-        RemoveNth(i);
-      }
-    }
+  for (size_t i = 1; i < size(); i = i + 1) {
+    RemoveNth(i);
   }
 }
 
@@ -278,8 +274,10 @@ template <typename ElementType>
 bool LinkedList<ElementType>::iterator::operator!=(
     const LinkedList<ElementType>::iterator& other) const {
   if (other.current_ != nullptr) {
-    return (other.current_ != current_);
-  } else return !(other.current_ == nullptr && current_ == nullptr);
+    return other.current_ != current_;
+  } else {
+    return !(other.current_ == nullptr && current_ == nullptr);
+  }
 }
 
 template <typename ElementType>

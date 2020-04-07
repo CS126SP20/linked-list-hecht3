@@ -230,6 +230,11 @@ TEST_CASE("Remove Nth node", "[Vec constructor][size][empty]") {
     REQUIRE(list.back() == 0);
     REQUIRE(list.front() == 7);
   }
+
+  SECTION("N out of bounds") {
+    list.RemoveNth(8);
+    REQUIRE_THROWS(std::out_of_range("Node index out of range"));
+  }
 }
 
 TEST_CASE("Pop back",
@@ -265,33 +270,32 @@ TEST_CASE("Remove odd", "[Vec constructor][size][empty][front][back]") {
   vec.push_back(9);
   vec.push_back(10);
 
-//  //FAILS HERE_____________________________________________________________________
-//  SECTION("Remove odd on even length list and check size") {
-//    LinkedList<int> list(vec);
-//    REQUIRE(list.size() == 6);
-//    list.RemoveOdd();
-//    REQUIRE(list.size() == 3);
-//    REQUIRE(list.back() == 9);
-//    REQUIRE(list.front() == 0);
-//    REQUIRE(!list.empty());
-//  }
-//
-//  vec.clear();
-//  vec.push_back(0);
-//  vec.push_back(7);
-//  vec.push_back(1);
-//  vec.push_back(2);
-//  vec.push_back(9);
-//
-//  SECTION("Remove odd on odd length list and check size") {
-//    LinkedList<int> list(vec);
-//    REQUIRE(list.size() == 5);
-//    list.RemoveOdd();
-//    REQUIRE(list.size() == 3);
-//    REQUIRE(list.back() == 9);
-//    REQUIRE(list.front() == 0);
-//    REQUIRE(!list.empty());
-//  }
+  //FAILS HERE_____________________________________________________________________
+  SECTION("Remove odd on even length list and check size") {
+    LinkedList<int> list(vec);
+    list.RemoveOdd();
+    REQUIRE(list.size() == 3);
+    REQUIRE(list.back() == 9);
+    REQUIRE(list.front() == 0);
+    REQUIRE(!list.empty());
+  }
+
+  vec.clear();
+  vec.push_back(0);
+  vec.push_back(7);
+  vec.push_back(1);
+  vec.push_back(2);
+  vec.push_back(9);
+
+  SECTION("Remove odd on odd length list and check size") {
+    LinkedList<int> list(vec);
+    REQUIRE(list.size() == 5);
+    list.RemoveOdd();
+    REQUIRE(list.size() == 3);
+    REQUIRE(list.back() == 9);
+    REQUIRE(list.front() == 0);
+    REQUIRE(!list.empty());
+  }
 }
 
 TEST_CASE("Clear", "[Vec constructor][size][empty][front][back]") {
@@ -445,6 +449,7 @@ TEST_CASE("Test insertion operator", "[vec constructor][insertion operator]") {
     LinkedList<int> list(vec);
     std::cout << list;
   }
+  std::cout << '\n';
 
   std::vector<char> char_vec;
   char_vec.push_back('a');
